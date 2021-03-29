@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>邮件服务</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="css/admin.css" media="all">
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">申请页面</div>
+                <div class="layui-card-body">
+                    <div class="layui-form" wid100 lay-filter="">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">用户名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="smtp_server" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">实际姓名</label>
+                            <div class="layui-input-inline" style="width: 80px;">
+                                <input type="text" name="cache" lay-verify="number" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">申请理由</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="msg" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">发件人昵称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="send_nickname" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">主题</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="send_nickname" value="卖家申请" autocomplete="off" class="layui-input" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-filter="set_system_email" id="apply">发送申请</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/jquery.js"></script>
+<script src="layui/layui.js"></script>
+<script>
+    $("#apply").click(function () {
+        $.ajax({
+            url: "mail/find",
+            type: "post",
+            dataType: "json",
+            data: {sendMailer: localStorage.getItem("username")},
+            success: function (data) {
+                //用户申请判断
+                if (data === true) {
+                    var username = localStorage.getItem("username");/*获取当前登录的用户名*/
+                    var date = new Date();
+                    var mailTime = date.toLocaleString();//获得当前发送申请的时间
+                    $.ajax({
+                        url: "mail/save",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            sendMailer: username,
+                            msgTheme: $("#send_nickname").val(),
+                            message: $("#msg").val(),
+                            mailTime: mailTime,
+                            status: '未处理'
+                        },
+                        success: function (data) {
+                            console.info(data);
+                            layui.use('layer', function () {
+                                var layer = layui.layer;
+                                layer.msg("申请成功,请耐心等待处理结果");
+                            });
+                        }
+                    });
+                } else if (data === false) {
+                    //用户已经申请过了
+                    layui.use('layer', function () {
+                        var layer = layui.layer;
+                        layer.msg("请勿重复申请");
+                    });
+                }
+            }
+        });
+    });
+
+
+</script>
+</body>
+</html>

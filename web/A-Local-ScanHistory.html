@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>浏览历史</title>
+</head>
+<link rel="stylesheet" href="layui/css/layui.css" media="all">
+<body>
+<div class="layui-card">
+    <div class="layui-card-header"></div>
+    <div class="layui-card-body">
+        <table class="layui-hide" id="history" lay-filter="user" lay-data="{id: 'history'}"></table>
+    </div>
+</div>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="look">查看</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script src="layui/layui.js"></script>
+<script>
+    layui.use(['table','jquery','layer','form'],function () {
+       var form = layui.form;
+       var layer = layui.layer;
+       var table = layui.table;
+       var $ = layui.jquery;
+       var username = localStorage.getItem('username');
+       table.render({
+           elem:"#history",
+           url:"car/findHistory?scanner="+username,
+           width:1225,
+           cols:[[
+               {type:'checkbox'}
+               ,{field:'carName', title: '商品名', width:750}
+               ,{field:'time', title: '浏览时间', width:250}
+               ,{fixed: 'right', width:170,title:'操作', toolbar: '#barDemo'}
+           ]],
+           id:"history",
+           defaultToolbar:false
+       });
+       table.on('tool(user)',function (obj) {
+           if(obj.event === 'del'){
+               var index= layer.confirm('您确定删除该记录吗？', {
+                   btn: ['确定','取消'] //按钮
+               }, function(){
+                   $.ajax({
+                       url:'car/delHis',
+                       type:'post',
+                       dataType:'json',
+                       data:{id:obj.data.id},
+                       success:function (res) {
+                           if(res){
+                               obj.del();
+                               layer.msg("删除成功");
+                           }else {
+                               layer.msg("删除失败,请联系管理员");
+                           }
+                       }
+                   })
+               }, function(){
+                   layer.close(index);
+               });
+           }else if(obj.event === 'look'){
+               //查看跳转到当前页面
+               window.location.href = "A-ProductDetails.html?id="+obj.data.id
+           }
+       });
+    });
+</script>
+</body>
+</html>

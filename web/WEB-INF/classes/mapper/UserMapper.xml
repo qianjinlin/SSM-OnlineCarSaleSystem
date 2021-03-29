@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 该文件编写mybatis中的mapper接口里面的方法提供对应的sql语句 -->
+<mapper namespace="cn.pji.car.dao.UserMapper">
+    <!--登录操作-->
+    <select id="login" resultType="cn.pji.car.domain.User">
+       select * from user where username=#{username} and password=#{password}
+    </select>
+    <!--个人信息查看-->
+    <select id="findAllByUsername" resultType="cn.pji.car.domain.User">
+        select * from user where username = #{username}
+    </select>
+    <!--上传图片-->
+    <update id="updateImage" parameterType="cn.pji.car.domain.User">
+       update user set imgUrl = #{imgUrl}
+       where username = #{username}
+    </update>
+   <!--修改密码-->
+    <update id="changePass" parameterType="cn.pji.car.domain.User">
+        update user set password  = #{password} where username = #{username} ;
+    </update>
+    <!--注册用户-->
+    <insert id="register" parameterType="cn.pji.car.domain.User">
+      insert into user(username, password, isSeller, identitys, nickname, sex, mail, phone, imgUrl, logintime)
+      values (#{username},#{password},'no','normal',#{nickname},'1',null ,null ,null ,null );
+    </insert>
+    <insert id="addHistory" parameterType="cn.pji.car.domain.History">
+        insert into history (carName, time, scanner) values (#{carName},#{time},#{scanner});
+    </insert>
+    <select id="findHistory" resultType="cn.pji.car.domain.History">
+        select * from history where scanner = #{scanner};
+    </select>
+    <delete id="delHis" parameterType="cn.pji.car.domain.History">
+        delete from history where id = #{id}
+    </delete>
+
+
+</mapper>

@@ -1,0 +1,342 @@
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>发布汽车</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="css/admin.css" media="all">
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header" style="color:#1E9FFF;">恭喜您成功开通卖家权限，您可以发布自己想要拍卖的汽车了</div>
+                <div class="layui-card-body" pad15>
+
+                    <div class="layui-form" lay-filter="">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车辆名字</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="carName" placeholder="请输入车辆的全名" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车辆品牌</label>
+                            <div class="layui-input-inline">
+                                <select name="role" id="brand">
+                                    <option value="请选择你的车辆的品牌">请选择你的车辆的品牌</option>
+                                    <option value="奔驰">奔驰</option>
+                                    <option value="路虎">路虎</option>
+                                    <option value="大众">大众</option>
+                                    <option value="玛莎拉蒂">玛莎拉蒂</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">燃油标号</label>
+                            <div class="layui-input-inline">
+                                <select name="role" id="oil">
+                                    <option value="请选择燃油标号">请选择燃油标号</option>
+                                    <option value="89号汽油">89号汽油</option>
+                                    <option value="90号汽油">90号汽油</option>
+                                    <option value="92号汽油">92号汽油</option>
+                                    <option value="96号汽油">96号汽油</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">拍卖人</label>
+                            <div class="layui-input-inline">
+                                <input type="text"  id="owner" lay-verify="nickname" autocomplete="off"  class="layui-input" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">环保标准</label>
+                            <div class="layui-input-inline">
+                                <select name="role" id="blue">
+                                    <option value="请选择环保标准">请选择燃油标号</option>
+                                    <option value="国3">国3</option>
+                                    <option value="国4">国4</option>
+                                    <option value="欧4">欧4</option>
+                                    <option value="欧5">欧5</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--车辆图片-->
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车辆图片1</label>
+                            <div class="layui-input-inline">
+                                <input name="avatar" lay-verify="required" id="img1" placeholder="图片地址"  class="layui-input">
+                            </div>
+                            <div class="layui-input-inline layui-btn-container" style="width: auto;">
+                                <button type="button" class="layui-btn layui-btn-primary" id="up1">
+                                    <i class="layui-icon">&#xe67c;</i>上传图片
+                                </button>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车辆图片2</label>
+                            <div class="layui-input-inline">
+                                <input name="avatar" lay-verify="required" id="img2" placeholder="图片地址"  class="layui-input">
+                            </div>
+                            <div class="layui-input-inline layui-btn-container" style="width: auto;">
+                                <button type="button" class="layui-btn layui-btn-primary" id="up2">
+                                    <i class="layui-icon">&#xe67c;</i>上传图片
+                                </button>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                        <label class="layui-form-label">车辆图片3</label>
+                        <div class="layui-input-inline">
+                            <input name="avatar" lay-verify="required" id="img3" placeholder="图片地址"  class="layui-input">
+                        </div>
+                        <div class="layui-input-inline layui-btn-container" style="width: auto;">
+                            <button type="button" class="layui-btn layui-btn-primary" id="up3">
+                                <i class="layui-icon">&#xe67c;</i>上传图片
+                            </button>
+                           </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车辆图片4</label>
+                            <div class="layui-input-inline">
+                                <input name="avatar" lay-verify="required" id="img4" placeholder="图片地址"  class="layui-input">
+                            </div>
+                            <div class="layui-input-inline layui-btn-container" style="width: auto;">
+                                <button type="button" class="layui-btn layui-btn-primary" id="up4">
+                                    <i class="layui-icon">&#xe67c;</i>上传图片
+                                </button>
+                            </div>
+                        </div>
+                        <!--车辆里程数-->
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车辆里程数</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="meters" placeholder="请输入车辆的里程数" autocomplete="off" class="layui-input">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">公里</div>
+                        </div>
+                        <!--车辆颜色-->
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车辆颜色</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="color" placeholder="请输入车辆的颜色" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <!--车辆所在地-->
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车辆所在地</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="address" placeholder="请输入车辆的地址" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车辆长度</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="length" placeholder="请输入车辆的长度" autocomplete="off" class="layui-input">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">M(米)</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车辆宽度</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="width" placeholder="请输入车辆的宽度" autocomplete="off" class="layui-input">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">M(米)</div>
+                        </div>
+                        <!--底价-->
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">拍卖底价</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="lowerPrice" placeholder="请输入车辆开始拍卖的底价" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <!--原价-->
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车辆原价</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="orgPrice" placeholder="请输入车辆原价" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <!--车主联系电话-->
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">联系电话</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="cellphone" placeholder="请输入您的联系电话" lay-verify="phone" autocomplete="off" class="layui-input">
+                            </div>
+                    </div>
+                        <!--过户次数-->
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">过户次数</label>
+                            <div class="layui-input-inline">
+                                <select name="role" id="guohucishu">
+                                    <option value="请选择次数">请选择次数</option>
+                                    <option value="1">1次</option>
+                                    <option value="2">2次</option>
+                                    <option value="3">3次</option>
+                                    <option id="others">5次以上</option>
+                                </select>
+                            </div>
+                            <div id="help"><i class="layui-icon layui-icon-help"></i></div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">备注</label>
+                            <div class="layui-input-inline">
+                                <textarea id="remarks" placeholder="请输入内容" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" id="app" lay-filter="setmyinfo">确认发布拍卖</button>
+                                <button type="button" id="reset" class="layui-btn layui-btn-primary">重新填写</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/jquery.js"></script>
+<script src="layui/layui.js"></script>
+<script>
+    window.onload = function(){
+        $("#owner").val(localStorage.getItem("username"));
+    }
+    $("#help").click(function () {
+         layui.use('layer',function () {
+             var layer = layui.layer;
+             layer.msg("过户次数指的就是被转手的次数",{
+                 time:0,
+                 btn:['知道了'],
+                 yes:function (index) {
+                     layer.close(index);
+                 }
+             });
+         });
+     });
+
+
+   layui.use(['form','upload','layer','jquery'],function () {
+      var form = layui.form;
+      var layer = layui.layer;
+      var upload = layui.upload;
+      var $ = layui.jquery;
+      /*车辆图片上传*/
+      var image1 = upload.render({
+              elem:"#up1",
+              url:"app/up1",
+              done:function (res) {
+                  console.info(res);
+                  $("#img1").val("http://localhost:8080/"+res.filePath);
+                  var path1 ="http://localhost:8080/"+res.filePath+"";
+                  localStorage.setItem("path1",path1);
+              },
+              error:function () {
+                alert('error');
+              }
+          });
+       var image2 = upload.render({
+           elem:"#up2",
+           url:"app/up2",
+           done:function (res) {
+               console.info(res);
+               $("#img2").val("http://localhost:8080/" + res.filePath);
+               var path2 ="http://localhost:8080/"+res.filePath+"";
+               localStorage.setItem("path2",path2);
+           },
+           error:function(res) {
+               alert('error');
+           }
+       });
+       var image3 = upload.render({
+           elem:"#up3",
+           url:"app/up3",
+           done:function (res) {
+               console.info(res);
+               $("#img3").val("http://localhost:8080/"+res.filePath);
+               var path3 ="http://localhost:8080/"+res.filePath+"";
+               localStorage.setItem("path3",path3);
+
+           },
+           error:function () {
+               alert('error');
+           }
+       });
+       var image4 = upload.render({
+           elem:"#up4",
+           url:"app/up4",
+           done:function (res) {
+               console.info(res);
+               $("#img4").val("http://localhost:8080/"+res.filePath);
+               var path4 ="http://localhost:8080/"+res.filePath+"";
+               localStorage.setItem("path4",path4);
+
+           },
+           error:function () {
+               alert('error');
+           }
+       });
+       //点击发布拍卖的action
+       $("#app").click(function () {
+           alert(localStorage.getItem("path1"));
+          var date = new Date();
+           $.ajax({
+              url:"app/apply",
+              type:"post",
+              dataType:"json",
+              data:{
+                  productId:2,
+                  productName:$("#carName").val(),
+                  productPrice:$("#lowerPrice").val(),
+                  productMeters:$("#meters").val(),
+                  productAddress:$("#address").val(),
+                  productOwner:localStorage.getItem("username"),
+                  productOwnerPhone:$("#cellphone").val(),
+                  productTime:date.toLocaleString(),
+                  productImage1:localStorage.getItem("path1"),
+                  productImage2:localStorage.getItem('path2'),
+                  productImage3:localStorage.getItem('path3'),
+                  productImage4:localStorage.getItem('path4'),
+                  productOthers:$("#guohucishu").val(),
+                  productColor:$("#color").val(),
+                  productOil:$("#oil").val(),
+                  productLength:$("#length").val(),
+                  productWidth:$("#width").val(),
+                  productBlueB:$("#blue").val(),
+                  productOrinPrice:$("#orgPrice").val(),
+                  productBrand:$("#brand").val(),
+                  productMsg:$("#remarks").val(),
+                  productStatus:"拍卖中....",
+                  productEndTime:'null'
+              },
+              success:function (data) {
+                  if(data === true){
+                      layer.msg("发布成功，您的车辆将展示在主页面",{
+                          icon:1
+                      });
+                  }else {
+                      layer.msg("发布错误error",{
+                          icon:5
+                      });
+                  }
+              }
+
+          }) ;
+       });
+
+   });
+
+
+</script>
+</body>
+</html>

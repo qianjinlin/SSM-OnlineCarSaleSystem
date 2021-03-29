@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" href="layui/css/layui.css">
+<body>
+<div class="layui-fluid" id="LAY-app-message">
+   <div class="layui-card">
+      <div class="layui-tab layui-tab-brief">
+         <ul class="layui-tab-title">
+            <li class="layui-this">已完成订单</li>
+         </ul>
+         <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+               <table id="table" lay-filter="com"></table>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+</body>
+<script src="layui/layui.js"></script>
+<script>
+   layui.use(['jquery', 'layer', 'table'], function () {
+      var table = layui.table;
+      var $ = layui.jquery;
+      var layer = layui.layer;
+      var username = localStorage.getItem('username');
+      table.render({
+         elem: '#table'
+         , url: 'app/findCom?name=' + username
+         , width: 965
+         , cols: [[
+            {field: 'id', width: 60, title: 'Id'}
+            , {field: 'name', width: 200, title: '汽车名称'}
+            , {field: 'user', width: 300, title: '成交用户名'}
+            , {field: 'time', width: 200, title: '成交时间'}
+            , {field: 'cPrice', width: 200, title: '成交价'}
+         ]]
+      });
+   });
+</script>
+</html>

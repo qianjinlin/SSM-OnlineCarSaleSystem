@@ -1,0 +1,240 @@
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>消息中心</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="css/admin.css" media="all">
+</head>
+<body>
+
+<div class="layui-fluid" id="LAY-app-message">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">拍卖消息</li>
+                <li id="UserApply">用户申请信息<span class="layui-badge-dot"></span></li><!--要是普通人员就没有这个-->
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <table id="LAY-app-message-all" lay-filter="LAY-app-message-all"></table>
+                </div>
+                <div class="layui-tab-item">
+                    <table id="LAY-app-message-notice" lay-filter="LAY-app-message-notice"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="barDemo1">
+    <a class="layui-btn layui-btn-xs" lay-event="ok"><i class="layui-icon layui-icon-ok"></i>成交</a>
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="agree">同意</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reject">拒绝</a>
+</script>
+<script type="text/html" id="demo">
+    <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
+        <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="getData">批量删除</button>
+    </div>
+</script>
+<script src="js/jquery.js"></script>
+<script src="layui/layui.js"></script>
+<script>
+    window.onload = function(){
+        var username = localStorage.getItem("username");
+        $.ajax({
+            url:"car/findAllByUsername",
+            type:"post",
+            dataType:"json",
+            data:{username:username},
+            success:function (data) {
+               console.info(data);
+                console.info(data[0].identitys);
+                if(data[0].identitys === 'unnormal'){
+                    $('#UserApply').show();//显示用户申请
+                }else {
+                    $("#UserApply").hide();
+                }
+            },
+            error:function () {
+                layui.use('layer',function () {
+                   var layer = layui.layer;
+                   layer.msg("显示失败,请登录后再试");
+                });
+            }
+        });
+    }
+    layui.use(['element','table','layer','jquery'],function () {
+       var element = layui.element;
+       var layer = layui.layer;
+       var table = layui.table;
+       var $ = layui.jquery;
+       //获取当前登录的用户
+        var sellerName =localStorage.getItem('username');
+       //用户拍卖后就会在这里显示信息给卖家
+        var tableIns =table.render({
+             elem: '#LAY-app-message-all'
+            ,url:'auc/userMsg?sellerName='+sellerName
+            ,width:1201
+            ,toolbar:"#demo"
+            ,cols: [[
+                 {type:'checkbox'}
+                ,{field:'message', width:500, title: '内容'}
+                ,{field:'userName', width:120, title: '用户名'}
+                ,{field:'productName', width:150, title: '商品名'}
+                ,{field:'time', width:230, title: '时间',sort:true}
+                ,{fixed: 'right', title:'操作', toolbar: '#barDemo1', width:145}
+            ]]
+            ,defaultToolbar:false
+            ,id:'idTest'
+        });
+        //成交
+        table.on('tool(LAY-app-message-all)',function (obj) {
+            var data = obj.data;
+            console.info(data);
+            if(obj.event === 'ok'){
+                //成交之后该商品就不会再次拍卖
+                var index=layer.confirm('你确定与当前用户成交吗', {
+                    btn: ['确定','取消'] //按钮
+                }, function(){
+                    var date = new Date();
+                    $.ajax({
+                        url:"auc/com",
+                        type:"post",
+                        dataType:"json",
+                        data:{
+                            name:localStorage.getItem("username"),
+                            user:data.userName,
+                            time:date.toLocaleString(),
+                            price:data.price,
+                            Name:data.productName
+                        },
+                        success:function (res) {
+                            if(res){
+                                layer.msg("成交成功");
+                                //修改拍卖物品状态
+                                $.ajax({
+                                    url:"app/updateCom",
+                                    type:"post",
+                                    dataType:"json",
+                                    data:{
+                                        name:data.productName
+                                    }
+                                });
+                            }
+                        }
+                    })
+                }, function(){
+                   layer.close(index);//关闭页面
+                });
+            }
+        });
+        //批量删除
+        table.on('toolbar(LAY-app-message-all)',function (obj) {
+            var datas = table.checkStatus('idTest');
+            if(obj.event === "getData"){
+                var datalist = datas.data;
+                //判断是否选中
+                if(datalist.length === 0){
+                    layer.msg("请至少选择一行数据");
+                }else {
+                    for(var i = 0;i<datalist.length;i++){
+                        delD(datalist[i].userName);
+                    }
+                    layer.msg("删除成功");
+                    tableIns.reload('idTest');//表格立刻重载
+                }
+
+            }
+        });
+        //批量删除信息
+        function delD(Name){
+            $.ajax({
+                url:"auc/delD",
+                dataType:'json',
+                type:"post",
+                data:{
+                    name:Name
+                }
+            });
+        }
+        //管理员才存在的页面,用于同意用户成为卖家的申请
+        var index =table.render({
+             elem: '#LAY-app-message-notice'
+            ,url:'mail/findAllApplication'
+            ,width:855
+            ,cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                ,{field:'sendMailer', title:'发件人', width:100}
+                ,{field:'msgTheme', title:'邮件主题', width:120 }
+                ,{field:'message', title:'邮件内容', width:150}
+                ,{field:'mailTime', title:'申请时间', width:200, sort: true}
+                ,{field:'status', title:'状态', width:80, edit: 'text'}
+                ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+            ]]
+            ,defaultToolbar:false
+            ,id:"app"
+        });
+        //表格每5秒刷新一次，轮询
+        function refersh(){
+            table.reload(index);
+        }
+        setInterval(refersh,5000);
+        table.on('tool(LAY-app-message-notice)',function (obj) {
+            var data = obj.data;
+            if(obj.event === 'agree'){
+                console.info(data.status);
+                if(data.status ===  "已处理"){
+                    layer.msg("该申请已经被处理了！请勿重复点击");
+                }else {
+                    Deal();
+                }
+                function Deal(){
+                    $.ajax({
+                        url:"mail/agree",
+                        type:"post",
+                        dataType:"json",
+                        data:{username:data.sendMailer},
+                        success:function (data) {
+                            /*如果user表中的isSeller被修改了，那么就修改邮件表mail中的status状态*/
+                            if(data === true){
+                                /*这里必须重新获取data的数据*/
+                                var data1= obj.data;
+                                $.ajax({
+                                    url:"mail/statusDeal",
+                                    type:"post",
+                                    dataType:"json",
+                                    data:{sendMailer:data1.sendMailer},
+                                    success:function (data) {
+                                        if(data ===  true){
+                                            layer.msg("处理成功");
+                                            data1.status = "已处理";
+                                        }else {
+                                            layer.msg("请求错误，请联系管理员");
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            }else if(obj.event === 'reject'){
+                var data2 = obj.data;
+                if(data2.status === "已处理"){
+                    layer.msg("该申请已经被处理了！请勿重复点击");
+                }else {
+                    obj.del();
+                }
+            }
+        })
+    });
+</script>
+</body>
+</html>

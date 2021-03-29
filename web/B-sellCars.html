@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>卖车页面</title>
+</head>
+<link rel="stylesheet" href="layui/css/layui.css">
+<link rel="stylesheet" href="css/admin.css">
+<body>
+<style>
+    #syt{
+        color: #01AAED;
+        font-size: 20px;
+    }
+</style>
+<div class="layui-col-md12">
+    <div class="layui-card">
+        <div class="layui-card-body" style="height: 200px;">
+            <div class="layui-card-header">卖家页面</div>
+            <!--判断用户是否是买家，如果不是，则显示该页面-->
+            <div id="check">
+            <div id="syt">--您现在还不是卖家哦，您可以选择点击申请， 向管理员发送实名认证获取卖家资格--</div>
+                <a href="B-Application.html"> <button class="layui-btn layui-btn-normal">点我申请</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="js/jquery.js"></script>
+<script src="layui/layui.js"></script>
+<script>
+</script>
+</html>

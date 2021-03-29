@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 该文件编写mybatis中的mapper接口里面的方法提供对应的sql语句 -->
+<mapper namespace="cn.pji.car.dao.AuctionMapper">
+    <!--将用户点击拍卖后将反馈给卖家-->
+    <insert id="insert" parameterType="cn.pji.car.domain.UserMessage">
+        insert into usermessage(sellerName, userName, Message, productName,price,time)
+        values (#{sellerName},#{userName},#{Message},#{productName},#{price},#{time});
+    </insert>
+    <select id="findAllByName" resultType="cn.pji.car.domain.UserMessage">
+        select * from usermessage where productName = #{productName}
+    </select>
+    <select id="findAllById" resultType="cn.pji.car.domain.Car">
+        select * from product where productId = #{id}
+    </select>
+    <insert id="insertCo" parameterType="cn.pji.car.domain.UserComments">
+        insert into usercomments(text, username,time, Name)
+        values (#{text},#{username},#{time},#{Name})
+    </insert>
+    <select id="findCo" resultType="cn.pji.car.domain.UserComments">
+        select * from usercomments where Name = #{Name};
+    </select>
+    <select id="userMsg" resultType="cn.pji.car.domain.UserMessage">
+        select *  from usermessage where sellerName = #{sellerName}
+    </select>
+    <delete id="delD" parameterType="cn.pji.car.domain.UserMessage">
+        delete from usermessage where userName= #{name}
+    </delete>
+    <insert id="complete" parameterType="cn.pji.car.domain.Completed">
+        insert into completed (sellerName,user,time, cPrice,Name) values
+         (#{name},#{user},#{time},#{price},#{Name});
+    </insert>
+    <select id="myCom" resultType="cn.pji.car.domain.UserComments">
+        select * from usercomments where username =#{username};
+    </select>
+    <delete id="delCom" parameterType="cn.pji.car.domain.UserComments">
+        delete from usercomments where id = #{id}
+    </delete>
+
+
+</mapper>

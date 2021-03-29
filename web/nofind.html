@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>404 页面不存在</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="css/admin.css" media="all">
+</head>
+<body>
+
+
+<div class="layui-fluid">
+    <div class="layadmin-tips">
+        <h2 style="bottom: 100px">
+            暂时没找到条件为<a id="chan"></a>的汽车
+        </h2>
+    </div>
+</div>
+
+<script src="layui/layui.js"></script>
+<script src="js/jquery.js"></script>
+<script>
+    function getQuery(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURI(r[2]); return null;
+    }
+    var name =getQuery("name");
+    $("#chan").text(name);
+</script>
+</body>
+</html>

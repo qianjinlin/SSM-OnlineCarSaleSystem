@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" href="layui/css/layui.css">
+<link rel="stylesheet" href="css/admin.css" media="all">
+<link rel="stylesheet" href="css/layuitemplate.css" media="all">
+<body>
+<div class="layui-fluid layadmin-cmdlist-fluid">
+    <div class="layui-row layui-col-space30"id="insert">
+        <!--拼接代码的部分-->
+    </div>
+    <div class="layui-col-md12 layui-col-sm12">
+        <div id="demo0"></div>
+    </div>
+</div>
+</body>
+<script src="layui/layui.js"></script>
+<script>
+    layui.use(['laypage', 'layer', 'carousel', 'jquery'], function () {
+        var laypage = layui.laypage
+            , layer = layui.layer;
+        var carouse = layui.carousel;
+        var $ = layui.jquery;
+        laypage.render({
+            elem: 'demo0'
+            , count: 50
+        });
+        //获取url参数
+        function getQuery(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return decodeURI(r[2]); return null;
+        }
+        var oil = getQuery('oil');
+        $.ajax({
+            url: "app/oil",
+            type: 'post',
+            dataType: "json",
+            data:{oil:oil},
+            success: function (data) {
+                if(data.length === 0){
+                    window.location.href = "nofind.html?name="+oil;
+                }else {
+                    data.forEach(function (item) {
+                        var html = "<div class='layui-col-md2 layui-col-sm4'> " +
+                            "<div class=\"cmdlist-container\" id='h" + item.productId + "'>" +
+                            "                <div class=\"layui-carousel\" id=\"test" + item.productId + "\">" +
+                            "                    <div carousel-item>\n" +
+                            "                         <img src=\"" + item.productImage1 + "\">" +
+                            "                         <img src=\"" + item.productImage2 + "\">" +
+                            "                         <img src=\"" + item.productImage3 + "\">" +
+                            "                         <img src=\"" + item.productImage4 + "\">" +
+                            "                    </div>" +
+                            "                </div>" +
+                            "                <a href='A-ProductDetails.html?id=" + item.productId + "'>" +
+                            "                    <div class=\"cmdlist-text\">" +
+                            "                        <p class=\"info\" id=\"info\">" + item.productName + "</p>" +
+                            "                        <div class=\"price\">" +
+                            "                            <b>￥" + item.productPrice / 10000 + "万</b>" +
+                            "                            <span class=\"flow\">" +
+                            "                                 <i class=\"layui-icon layui-icon-rate\"></i> " + item.productStatus + "" +
+                            "                            </span>" +
+                            "                        </div>" +
+                            "                    </div>" +
+                            "                </a>" +
+                            "            </div>" +
+                            "</div>";
+                        $("#insert").append(html);
+                        var ins = carouse.render({
+                            elem: "#test" + item.productId + "",
+                            width: "100%",
+                            autoplay: true,
+                            interval: 1000,
+                            anim: "default",
+                        });
+                        ins.reload({elem: "#test" + item.productId + ""});
+                    });
+                }
+            },
+            error: function (data) {
+                layer.msg("查询错误 error");
+            }
+        });
+    });
+</script>
+</html>

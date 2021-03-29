@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>我发布的</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="layui/css/layui.css"  media="all">
+</head>
+<body>
+<div class="layui-fluid" id="LAY-app-message">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">我发布的</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <table id="test" lay-filter="LAY-app-message-all"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="stop">停止拍卖</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="change">修改价格</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除该商品</a>
+</script>
+<script src="layui/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['layer', 'table', 'jquery'], function () {
+        var table = layui.table;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+        var username = localStorage.getItem('username');
+        table.render({
+            elem: '#test'
+            , url: 'app/myapp?Name=' + username
+            , width: 1065
+            , cols: [[
+                {field: 'productId', width: 60, title: 'Id'}
+                , {field: 'productName', width: 200, title: '汽车名称'}
+                , {field: 'productPrice', width: 300, title: '拍卖底价', edit: 'text'}
+                , {field: 'productStatus', width: 200, title: '拍卖状态'}
+                , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 300}
+            ]]
+        });
+        table.on('tool(LAY-app-message-all)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                var index = layer.confirm('确定删除该商品吗?', {
+                    btn: ['确定', '取消'] //按钮
+                }, function () {
+                    //确定
+                    $.ajax({
+                        url: "app/del",
+                        dataType: 'json',
+                        type: 'post',
+                        data: {id: data.productId},
+                        success: function (res) {
+                            if (res) {
+                                obj.del();
+                                layer.msg('删除成功');
+                            } else {
+                                layer.msg("删除失败,请联系管理员");
+                            }
+                        }
+                    });
+                }, function () {
+                    //取消
+                    layer.close(index);
+                });
+            } else if (obj.event === 'stop') {
+                $.ajax({
+                    url: "app/update",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        id: data.productId
+                    },
+                    success: function (res) {
+                        if (res) {
+                            layer.msg('状态已修改');
+                            data.productStatus = '已经结束';
+                            table.reload('test');
+                        }
+                    }
+                })
+            } else if (obj.event === 'change') {
+                $.ajax({
+                    url: "app/updatePrice",
+                    type: 'post',
+                    dataType: "json",
+                    data: {
+                        price: data.productPrice,
+                        id: data.productId
+                    },
+                    success: function (res) {
+                        if (res) {
+                            layer.msg("价格修改成功");
+                        } else {
+                            layer.msg("修改失败请联系管理员");
+                        }
+                    }
+                })
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 该文件编写mybatis中的mapper接口里面的方法提供对应的sql语句 -->
+<mapper namespace="cn.pji.car.dao.CarMapper">
+    <!--发布拍卖汽车-->
+    <insert id="applyCar" parameterType="cn.pji.car.domain.Car">
+        insert into product(productName, productPrice, productMeters, productAddress, productOwner, productOwnerPhone, productTime, productImage1, productImage2, productImage3, productImage4, productOthers, productColor, productOil, productLength, productWidth, productBlueB, productOrinPrice, productBrand, productMsg, productStatus, productEndTime)
+        values (#{productName},#{productPrice},#{productMeters},#{productAddress},#{productOwner},#{productOwnerPhone},#{productTime},#{productImage1},#{productImage2},#{productImage3},#{productImage4},#{productOthers},#{productColor},#{productOil},#{productLength},#{productWidth},#{productBlueB},#{productOrinPrice},#{productBrand},
+        #{productMsg},#{productStatus},#{productEndTime});
+    </insert>
+    <select id="findAll" resultType="cn.pji.car.domain.Car">
+        select productId,productName, productPrice, productMeters, productAddress, productOwner, productOwnerPhone, productTime, productImage1, productImage2, productImage3, productImage4, productOthers, productColor, productOil, productLength, productWidth, productBlueB, productOrinPrice, productBrand, productMsg, productStatus, productEndTime
+         from product;
+    </select>
+    <select id="findAllById" resultType="cn.pji.car.domain.Car">
+        select * from product where productId = #{id};
+    </select>
+    <select id="myApply" resultType="cn.pji.car.domain.Car">
+        select * from product where productOwner = #{Name}
+    </select>
+    <delete id="del" parameterType="cn.pji.car.domain.Car">
+        delete from product where productId = #{id}
+    </delete>
+    <update id="update" parameterType="cn.pji.car.domain.Car">
+        update product set productStatus = "已结束" where productId = #{id}
+    </update>
+    <update id="updatePrice" parameterType="cn.pji.car.domain.Car">
+        update product set productPrice = #{price} where productId=#{id}
+    </update>
+    <update id="updateCom" parameterType="cn.pji.car.domain.Car">
+        update product set productStatus = '已结束' where productName =#{name}
+    </update>
+    <select id="findCom" resultType="cn.pji.car.domain.Completed">
+        select * from completed where sellerName = #{name};
+    </select>
+    <select id="findMore" resultType="cn.pji.car.domain.Car">
+        select * from product;
+    </select>
+    <select id="findByBrand" resultType="cn.pji.car.domain.Car">
+        select * from product where productBrand = #{brand};
+    </select>
+    <select id="findByColor" resultType="cn.pji.car.domain.Car">
+        select * from product where productColor = #{color};
+    </select>
+    <select id="findByAddress" resultType="cn.pji.car.domain.Car">
+        select * from product where productAddress = #{address};
+    </select>
+    <select id="findBC" resultType="cn.pji.car.domain.Car">
+        select * from product where productBrand = #{brand} and productColor = #{color};
+    </select>
+    <select id="findBA" resultType="cn.pji.car.domain.Car">
+        select * from product where productBrand = #{brand} and productAddress = #{address};
+    </select>
+    <select id="findCA" resultType="cn.pji.car.domain.Car">
+        select * from product where  productColor = #{color} and productAddress = #{address};
+    </select>
+    <select id="find3" resultType="cn.pji.car.domain.Car">
+        select * from product where productColor = #{color} and productAddress = #{address} and productBrand = #{brand};
+    </select>
+    <select id="findByOil" resultType="cn.pji.car.domain.Car">
+        select * from product where productOil = #{oil};
+    </select>
+    <select id="findByBlue" resultType="cn.pji.car.domain.Car">
+        select * from product where productBlueB = #{blue};
+    </select>
+    <select id="findByG" resultType="cn.pji.car.domain.Car">
+        select * from product where productOthers = #{others};
+    </select>
+    <select id="findByMeters" resultType="cn.pji.car.domain.Car">
+        select * from product where productMeters  &gt;= #{low} and productMeters &lt;= #{high};
+    </select>
+    <select id="MetersMore" resultType="cn.pji.car.domain.Car">
+        select * from product where productMeters &gt; 40000;
+    </select>
+    <select id="laypage" resultType="cn.pji.car.domain.LayPage">
+        select * from product limit #{page},#{limit};
+    </select>
+
+</mapper>

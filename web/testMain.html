@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>在线车辆拍卖系统</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="css/admin.css" media="all">
+</head>
+<body class="layui-layout-body">
+
+<div id="LAY_app">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <!-- 头部区域 -->
+            <ul class="layui-nav layui-layout-left">
+                <li class="layui-nav-item layadmin-flexible" lay-unselect>
+                    <a href="javascript:;"  title="侧边伸缩">
+                        <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
+                    </a>
+                </li>
+                <li class="layui-nav-item" lay-unselect>
+                    <a  id="refersh" title="刷新">
+                        <i class="layui-icon layui-icon-refresh-3"></i>
+                    </a>
+                </li>
+                <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                    <input type="text" placeholder="" id="time" autocomplete="off" class="layui-input layui-input-search" disabled>
+                </li>
+            </ul>
+            <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
+                <li class="layui-nav-item" lay-unselect>
+                    <a href="UserMessage.html" target="blank" lay-text="消息中心">
+                        <i class="layui-icon layui-icon-notice"></i>
+                        <span class="layui-badge-dot" id="dot"></span>
+                    </a>
+                </li>
+                <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                    <a href="javascript:;" layadmin-event="fullscreen">
+                        <i class="layui-icon layui-icon-screen-full" id="full"></i>
+                    </a>
+                </li>
+
+                <li class="layui-nav-item" lay-unselect>
+                    <a href="javascript:;">
+                        <cite id="localName"></cite>
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="B-basicInfo.html" target="blank" class="site-demo-active" id="25" data-type="tabAdd" >基本资料</a></dd>
+                        <dd><a href="AppliedCar.html" target="blank" class="site-demo-active" id="33" data-type="tabAdd" >我发布的</a></dd>
+                        <dd><a target="blank" id="sellCar" class="site-demo-active" id="26" data-type="tabAdd">发布汽车</a></dd>
+                        <dd><a href="" target="blank" class="site-demo-active" id="27" data-type="tabAdd">浏览历史</a></dd>
+                        <dd><a href="B-completed.html" target="blank" class="site-demo-active" id="29" data-type="tabAdd">已完成订单</a></dd>
+                        <dd><a href="B-myComments.html" target="blank" class="site-demo-active" id="30" data-type="tabAdd">我的评论</a></dd>
+                        <dd><a href="A-Local-ChangePass.html" target="blank" class="site-demo-active" id="31" data-type="tabAdd">修改密码</a></dd>
+                        <dd><a href="B-aboutUs.html" target="blank" class="site-demo-active" id="32" data-type="tabAdd">关于</a></dd>
+                        <hr>
+                        <dd  style="text-align: center;"><a id="quit">退出登录</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                    <a href="javascript:;" layadmin-event="about"><i class="layui-icon layui-icon-more-vertical"></i></a>
+                </li>
+                <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect>
+                    <a href="javascript:;" layadmin-event="more"><i class="layui-icon layui-icon-more-vertical"></i></a>
+                </li>
+            </ul>
+        </div>
+        <!-- 侧边菜单 -->
+        <div class="layui-side layui-side-menu">
+            <div class="layui-side-scroll">
+                <div class="layui-logo">
+                    <span style="color: #1E9FFF">在线车辆管理系统</span>
+                </div>-
+                <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu">
+                    <li data-name="home" class="layui-nav-item layui-nav-itemed">
+                        <a href="A-Local-AllV.html" target="blank">
+                            <i class="layui-icon layui-icon-home"></i>
+                            <cite>所有商品</cite>
+                        </a>
+                    </li>
+                    <li data-name="component" class="layui-nav-item">
+                        <a href="javascript:;">
+                            <i class="layui-icon layui-icon-component"></i>
+                            <cite>车辆品牌</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd ><a class="site-demo-active" id="1" data-type="tabAdd"  target="blank">路虎</a></dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd><a class="site-demo-active" id="2" data-type="tabAdd"   target="blank">奔驰</a></dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd><a class="site-demo-active" data-type="tabAdd"  id="3" target="blank" >大众</a></dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd><a class="site-demo-active" data-type="tabAdd" id="4" target="blank">玛莎拉蒂</a></dd>
+                        </dl>
+                    </li>
+                    <li data-name="template" class="layui-nav-item">
+                        <a href="javascript:;">
+                            <i class="layui-icon layui-icon-template"></i>
+                            <cite>车辆所属地址</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd><a class="site-demo-active" data-type="tabAdd" id="5" target="blank" >恩施</a></dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd><a class="site-demo-active" data-type="tabAdd" id="6" target="blank" >江苏</a></dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd><a class="site-demo-active" data-type="tabAdd" id="7" target="blank" >湖南</a></dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd><a class="site-demo-active" data-type="tabAdd" id="8" target="blank" >广东</a></dd>
+                        </dl>
+                    </li>
+                    <li data-name="app" class="layui-nav-item">
+                        <a href="javascript:;" >
+                            <i class="layui-icon layui-icon-app"></i>
+                            <cite>车辆燃油标号</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd><a class="site-demo-active" data-type="tabAdd" id="9" target="blank" >98号汽油</a></dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd><a class="site-demo-active" data-type="tabAdd" id="10" target="blank" >95号汽油</a></dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd><a class="site-demo-active" data-type="tabAdd" id="11" target="blank" >91号汽油</a></dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd><a class="site-demo-active" data-type="tabAdd" id="12" target="blank" >89号汽油</a></dd>
+                        </dl>
+                    </li>
+                    <li data-name="senior" class="layui-nav-item">
+                        <a href="javascript:;">
+                            <i class="layui-icon layui-icon-senior"></i>
+                            <cite>车辆环保标准</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd><a class="site-demo-active" data-type="tabAdd" id="13" target="blank" >国家环保标准1</a></dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd><a class="site-demo-active" data-type="tabAdd" id="14" target="blank" >国家环保标准2</a></dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd><a class="site-demo-active" data-type="tabAdd" id="15" target="blank" >欧洲环保标准1</a></dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd><a class="site-demo-active" data-type="tabAdd" id="16" target="blank" >欧洲环保标准2</a></dd>
+                        </dl>
+                    </li>
+                    <li data-name="user" class="layui-nav-item">
+                        <a href="javascript:;">
+                            <i class="layui-icon layui-icon-note"></i>
+                            <cite>车辆过户情况</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd><a class="site-demo-active" data-type="tabAdd" id="17" target="blank">1次</a></dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd><a class="site-demo-active" data-type="tabAdd" id="18" target="blank" >2次</a></dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd><a class="site-demo-active" data-type="tabAdd" id="19" target="blank">3次</a></dd>
+                        </dl>
+                    </li>
+                    <li data-name="set" class="layui-nav-item">
+                        <a href="javascript:;">
+                            <i class="layui-icon layui-icon-set"></i>
+                            <cite>车辆里程数</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd><a class="site-demo-active" data-type="tabAdd" id="21" target="blank" >10-20万</a></dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd><a class="site-demo-active" data-type="tabAdd" id="22" target="blank" >20-30万</a></dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd><a class="site-demo-active" data-type="tabAdd" id="23" target="blank" >30-40万</a></dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd><a class="site-demo-active" data-type="tabAdd" id="24" target="blank">更大</a></dd>
+                        </dl>
+                    </li>
+                    <li data-name="get" class="layui-nav-item">
+                        <i class="layui-icon layui-icon-auz"></i>
+                        <a href="More.html" target="blank" data-type="tabAdd" id="50" class="site-demo-active">
+                            <cite>更多综合条件筛选</cite>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 页面标签 -->
+        <div class="layadmin-pagetabs" id="LAY_app_tabs">
+            <div class="layui-icon layadmin-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
+            <div class="layui-icon layadmin-tabs-control layui-icon-next" layadmin-event="rightPage"></div>
+            <div class="layui-icon layadmin-tabs-control layui-icon-down">
+                <ul class="layui-nav layadmin-tabs-select" lay-filter="layadmin-pagetabs-nav">
+                    <li class="layui-nav-item" lay-unselect>
+                        <a href="javascript:;"></a>
+                        <dl class="layui-nav-child layui-anim-fadein">
+                            <dd><a id="closeAllTabs">关闭全部标签页</a></dd>
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+            <div class="layui-tab" lay-unauto lay-allowClose="true" lay-filter="layadmin-layout-tabs">
+                <ul class="layui-tab-title" id="LAY_app_tabsheader">
+                    <a href="WelCome.html" target="blank"><li class="layui-this"><i class="layui-icon layui-icon-home"></i></li></a>
+                </ul>
+            </div>
+        </div>
+        <div class="layui-body" id="LAY_app_body">
+            <div class="layadmin-tabsbody-item layui-show">
+                <iframe name="blank" frameborder="0" class="layadmin-iframe" src="WelCome.html"></iframe>
+            </div>
+        </div>
+        <div class="layadmin-body-shade" layadmin-event="shade"></div>
+    </div>
+</div>
+<script src="js/jquery.js"></script>
+<script src="layui/layui.js"></script>
+<script>
+    window.onload = function () {
+        checkMsg();
+        setInterval(function() {
+            var now = (new Date()).toLocaleString();
+            $('#time').attr('placeholder',now);
+        }, 1000);
+        //判断是否有浏览记录
+        $("#27").click(function () {
+            $.ajax({
+                url:"car/findHistory",
+                type:"post",
+                dataType:'json',
+                data:{scanner:localStorage.getItem('username')},
+                success:function (data) {
+                    if(data.count === 0){
+                         $("#27").attr('href','NoneHistory.html');//暂无浏览记录
+                    }else {
+                        $("#27").attr('href','A-Local-ScanHistory.html');//浏览历史
+                    }
+                }
+            })
+        });
+
+        var username = localStorage.getItem("username");
+        if (username != null) {
+            //将用户名填充到用户名上
+            $("#localName").html(username);
+            //判断用户是否有新的信息
+        } else {
+            layer.msg('对不起您还没有登录哦', {
+                time: 0 //不自动关闭
+                , btn: ['现在去', '不了']
+                , yes: function (index) {
+                    window.location.href = "A-Login.html";
+                }
+            });
+        }
+    }
+    //判断是否有消息
+    function checkMsg(){
+        $.ajax({
+            url:"auc/userMsg",
+            type:"post",
+            dataType:"json",
+            data:{
+                sellerName:localStorage.getItem('username')
+            },
+            success:function (data) {
+                if(data.count >0){
+                    $(".layui-badge-dot").show();
+                }else{
+                    $(".layui-badge-dot").hide();
+                }
+            }
+
+        })
+    }
+    //点击发布汽车页面
+    $("#sellCar").click(function () {
+        $.ajax({
+            url: "car/findAllByUsername",
+            type: "post",
+            dataType: "json",
+            data: {username: localStorage.getItem("username")},
+            success: function (data) {
+                /*如果有就跳转到指定页面*/
+                if (data[0].isSeller === "yes") {
+                    $("#sellCar").attr('href',"B-ReleaseCar.html");
+                }else {
+                    $("#sellCar").attr('href',"B-sellCars.html");
+                }
+            },
+            error:function () {
+                layui.use('layer',function () {
+                   var layer = layui.layer;
+                   layer.msg('查询错误,请登录后再次尝试');
+                });
+            }
+        });
+    });
+
+    layui.use(['layer', 'element', 'jquery'], function () {
+            var element = layui.element;
+            var layer = layui.layer;
+            var $ = layui.jquery;
+            //刷新消息
+            $("#refersh").click(function () {
+                checkMsg();
+                layer.msg("刷新成功");
+            });
+            //添加事件
+            var active={
+                tabAdd:function(url,name,id){
+                    //这里解释一下,tab增加的时候会给li自动添加一个lay-id属性,其中lay-id的值等于你id的值
+                    element.tabAdd('layadmin-layout-tabs',{
+                          title:'<a target="blank" href='+url+'>'+name+'</a>'+'<a class="layui-tab-close"><i class="layui-icon layui-icon-close"></i></a>',
+                          content:"<iframe name=\"blank\" frameborder=\"0\" class=\"layadmin-iframe\" src='"+url+"'></iframe>",
+                          id:id
+                    });
+                    //删除tab
+                    $(".layui-tab-close").click(function () {
+                        active.tabDelete($(this).parent('li').attr('lay-id'));//就只会删除什么？，只会删除tab，不会取消其所显示的内容
+                    });
+                },
+                tabChange:function (id) {
+                    element.tabChange('layadmin-layout-tabs',id);
+                },
+                tabDelete:function (id) {
+                    element.tabDelete('layadmin-layout-tabs',id);
+                },
+                tableDeleteAll:function (idss) {
+                    $.each(idss,function (item) {
+                        console.info(item);
+                        element.tabDelete('layadmin-layout-tabs',item);
+                    });
+                }
+            };
+            //删除所有tab
+            $("#closeAllTabs").click(function () {
+                var tablist = $(".layui-tab-title li");//获取所有的tab
+                var ids= new Array();//把所有的id用数组放起来
+                $.each(tablist,function (i) {
+                    ids[i] = $(this).attr('lay-id');//将所有的id添加进数组
+                    active.tableDeleteAll(ids);//调用删除方法
+                    $('.layadmin-iframe').attr('src','WelCome.html');//将页面重置
+                })
+            });
+            //点击菜单栏的行为
+            $('.site-demo-active').on('click', function(){
+                 var id = $(this).attr('id');
+                 var url=$(this).attr('href');
+                 var text = $(this).html();
+                 if(CheckTab(id)){
+                     active.tabChange(id);
+                 }else {
+                     active.tabAdd(url,text,id);
+                 }
+            });
+            //检测tab是否已经被显示，点击对应tab就显示对应的tab
+            function CheckTab(id) {
+                var tablist = $(".layui-tab-title li:gt(0)"),//获取tab那一行后面所有的tab
+                    status = false;
+                layui.each(tablist,function (index,li) {
+                   if($(li).attr("lay-id") === id){//如果id相等了就说明这个你选择的tab已经有了，所以会选择change,前提不是点击tab
+                       status = true;
+                   }
+               });
+               return status;
+            }
+            //侧边伸缩
+            var isShow = true;
+            $("#LAY_app_flexible").click(function () {
+                $(".layui-nav-item cite").each(function () {
+                    if ($(this).is(':hidden')) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                    if (isShow) {
+                        $(".layadmin-pagetabs").hide();
+                        $(".layui-side.layui-side-menu").width(60);
+                        $("dd a").each(function () {
+                            $(this).hide();
+                        });
+                        isShow = false;
+                    } else {
+                        $(".layadmin-pagetabs").show();
+                        $(".layui-side.layui-side-menu").width(220);
+                        $("dd a").each(function () {
+                            $(this).show();
+                        });
+                        isShow = true;
+                    }
+                })
+
+            });
+            //用户点击退出登录
+            $("#quit").click(function () {
+                localStorage.removeItem("username");//删除用户的信息
+                window.location.href = "A-Login.html";
+            });
+        });
+        //全屏显示
+        $("#full").click(function () {
+            fullScreen();
+        });
+        function fullScreen() {
+            var element = document.documentElement;
+            if (element.requestFullscreen) {
+                element.requestFullscreen();
+            } else if (element.msRequestFullscreen) {
+                element.msRequestFullscreen();
+            } else if (element.mozRequestFullScreen) {
+                element.mozRequestFullScreen();
+            } else if (element.webkitRequestFullscreen) {
+                element.webkitRequestFullscreen();
+            }
+        }
+         //这里解释一下，onresize是检测网页是否全屏显示用的
+        window.onresize = function () {
+            var isFull = !!(document.webkitIsFullScreen || document.mozFullScreen ||
+                document.msFullscreenElement || document.fullscreenElement
+            );
+            if (isFull == false) {
+                $("#exitFullScreen").css("display", "none");
+                $("#fullScreen").css("display", "");
+            } else {
+                $("#exitFullScreen").css("display", "");
+                $("#fullScreen").css("display", "none");
+            }
+        }
+        //左侧菜单栏事件
+    $("#1").click(function () {
+        var  brand = $("#1").text();
+        $(".layadmin-iframe").attr('src','FindByBrand.html?brand='+brand);
+    });
+    $("#2").click(function () {
+        var  brand = $("#2").text();
+        $(".layadmin-iframe").attr('src','FindByBrand.html?brand='+brand);
+    });
+    $("#3").click(function () {
+        var  brand = $("#3").text();
+        $(".layadmin-iframe").attr('src','FindByBrand.html?brand='+brand);
+    });
+    $("#4").click(function () {
+        var  brand = $("#4").text();
+        $(".layadmin-iframe").attr('src','FindByBrand.html?brand='+brand);
+    });
+    $("#5").click(function () {
+        var address = $("#5").text();
+        $(".layadmin-iframe").attr('src',"FindByAddress.html?address="+address);
+    });
+    $("#6").click(function () {
+        var address = $("#6").text();
+        $(".layadmin-iframe").attr('src',"FindByAddress.html?address="+address);
+    });
+    $("#7").click(function () {
+        var address = $("#7").text();
+        $(".layadmin-iframe").attr('src',"FindByAddress.html?address="+address);
+    });
+    $("#8").click(function () {
+        var address = $("#8").text();
+        $(".layadmin-iframe").attr('src',"FindByAddress.html?address="+address);
+    });
+    $("#9").click(function () {
+        var oil = $("#9").text();
+        $(".layadmin-iframe").attr('src',"FindByOil.html?oil="+oil);
+    });
+    $("#10").click(function () {
+        var oil = $("#10").text();
+        $(".layadmin-iframe").attr('src',"FindByOil.html?oil="+oil);
+    });
+    $("#11").click(function () {
+        var oil = $("#11").text();
+        $(".layadmin-iframe").attr('src',"FindByOil.html?oil="+oil);
+    });
+    $("#12").click(function () {
+        var oil = $("#12").text();
+        $(".layadmin-iframe").attr('src',"FindByOil.html?oil="+oil);
+    });
+    $("#13").click(function () {
+        $(".layadmin-iframe").attr('src',"FindByBlueB.html?blue=国1");
+    });
+    $("#14").click(function () {
+        $(".layadmin-iframe").attr('src',"FindByBlueB.html?blue=国2");
+    });
+    $("#15").click(function () {
+        $(".layadmin-iframe").attr('src',"FindByBlueB.html?blue=欧1");
+    });
+    $("#16").click(function () {
+        $(".layadmin-iframe").attr('src',"FindByBlueB.html?blue=欧2");
+    });
+    $("#17").click(function () {
+        var guohu = $("#17").text();
+        $(".layadmin-iframe").attr('src',"FindByGuohu.html?guohu="+guohu);
+    });
+    $("#18").click(function () {
+        var guohu = $("#18").text();
+        $(".layadmin-iframe").attr('src',"FindByGuohu.html?guohu="+guohu);
+    });
+    $("#19").click(function () {
+        var guohu = $("#19").text();
+        $(".layadmin-iframe").attr('src',"FindByGuohu.html?guohu="+guohu);
+    });
+    $("#20").click(function () {
+        var guohu = $("#20").text();
+        $(".layadmin-iframe").attr('src',"FindByGuohu.html?guohu="+guohu);
+    });
+    $("#21").click(function () {
+        var meter = $("#21").text();
+        $(".layadmin-iframe").attr('src',"FindByMeters.html?meter="+meter);
+    });
+    $("#22").click(function () {
+        var meter = $("#22").text();
+        $(".layadmin-iframe").attr('src',"FindByMeters.html?meter="+meter);
+    });
+    $("#23").click(function () {
+        var meter = $("#23").text();
+        $(".layadmin-iframe").attr('src',"FindByMeters.html?meter="+meter);
+    });
+    $("#24").click(function () {
+        var meter = $("#24").text();
+        $(".layadmin-iframe").attr('src',"FindByMeters.html?meter="+meter);
+    });
+    //End..................................
+</script>
+</body>
+</html>
+
+

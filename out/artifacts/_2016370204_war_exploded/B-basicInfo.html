@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>设置我的资料</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="css/admin.css" media="all">
+    <link rel="stylesheet" href="layer/mobile/need/layer.css">
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">基本资料</div>
+                <div class="layui-card-body" pad15>
+                    <div class="layui-form" lay-filter="">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">我的角色</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="iden" class="layui-input">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux"></div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">用户名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="username"  id="username" readonly class="layui-input">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">不可修改</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">昵称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="nickname"  lay-verify="nickname" autocomplete="off" placeholder="请输入昵称" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">性别</label>
+                            <div class="layui-input-block">
+                                <input type="radio" name="sex" id="boy" value="1" title="男">
+                                <input type="radio" name="sex" id="girl" value="0" title="女">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">头像</label>
+                            <div class="layui-input-inline">
+                                <input name="avatar" lay-verify="required"  id="img" placeholder="图片地址" type="text" class="layui-input">
+                            </div>
+                            <div class="layui-input-inline layui-btn-container" style="width: auto;">
+                                <button type="button" class="layui-btn layui-btn-primary" id="LAY_avatarUpload">
+                                    <i class="layui-icon">&#xe67c;</i>上传图片
+                                </button>
+                                <button class="layui-btn layui-btn-primary" id="see">查看图片</button >
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">手机</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="cellphone"  lay-verify="phone" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">邮箱</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="email" value="" lay-verify="email" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/jquery.js"></script>
+<script src="layui/layui.js"></script>
+<script>
+    window.onload = function () {
+        //ajax请求，请求后台数据，展示个人信息
+        var username= localStorage.getItem("username");
+        var data1 = {username:username};
+        $.ajax({
+           url:"car/findAllByUsername",
+            type:"post",
+            dataType:"json",
+            data:data1,
+            success:function (data) {
+               /*因为我的数据库对sex的值为0和1，所以需要获取radio，这是layui的必做项*/
+               var radio=document.getElementsByName("sex");
+               var radioLength = radio.length;
+               for(var i = 0;i<radioLength;i++){
+                   if(data[0].sex === radio[i].value){
+                       /*当你的sex =1的时候。正好和radio[0].value相等
+                         radio[0].value = 1=男
+                       * radio[1].value = 0 =女*/
+                       $(radio[i]).next().click();
+                   }
+                 }
+                if(data[0].identitys === "normal"){
+                    $("#iden").val("普通人员");
+                }else if(data[0].identitys === "unnormal") {
+                    $("#iden").val("管理员");
+                }
+                $("#username").val(data[0].username);
+                $("#nickname").val(data[0].nickname);
+                $("#email").val(data[0].mail);
+                $("#cellphone").val(data[0].phone);
+                $("#img").val(data[0].imgUrl);
+            },
+            error:function (data) {
+               layui.use('layer',function () {
+                  var layer = layui.layer;
+                  layer.msg("个人信息查询错误，请稍后再试");
+               });
+            }
+        });
+    }
+    //如果用户没上传图片就加载这个，如果图片已经存在，那么就直接点击查看图片就可以了
+    $("#see").click(function () {
+        if($("#img").val == null || $("#img").val == ""|| $("#img").val == undefined){
+           layui.use('layer',function () {
+              var layer =layui.layer;
+              layer.msg("您还没有上传图片哦！")
+           });
+        }else{
+            var imgHtml = "<img src='"+$("#img").val()+"'>";
+            layui.use('layer',function () {
+                var layer =layui.layer;
+                layer.open({
+                   type:1,
+                    shade:false,
+                    title:false,
+                    area:["500px",'500px'],
+                    content:imgHtml
+                });
+            });
+        }
+    });
+
+  layui.use(['form','upload','jquery'],function () {
+      var form=layui.form;
+      var upload=layui.upload;
+      var $ = layui.jquery;
+      var page=upload.render({
+          elem:"#LAY_avatarUpload"
+          ,url:"/car/upload"
+          ,done:function (res) {
+              $("#see").click(function () {
+                  var img = new Image();
+                  img.src = "http://localhost:8080/"+res.filePath;
+                  var imgHtml = "<img src='http://localhost:8080/"+res.filePath+"' style='margin: auto'>"
+                  layui.use('layer',function () {
+                     var layer  = layui.layer;
+                     layer.open({
+                        type:1,
+                        shade:false,
+                        title:false,
+                         area:['500px','500px'],
+                         content:imgHtml
+                     });
+                  });
+              });
+              if(res.status == 400){
+                  layui.use('layer',function () {
+                     var layer = layui.layer;
+                      layer.msg("上传成功",{
+                         icon:1
+                     },function () {
+                         $("#img").val("http://localhost:8080/"+res.filePath);
+                         var path ="http://localhost:8080/"+res.filePath+"";
+                         $.ajax({
+                            url:"car//updateImg",
+                             type:"post",
+                             dataType:"json",
+                             data:{
+                                username:localStorage.getItem("username"),
+                                 imgUrl:path
+                             }
+                         });
+                      });
+                 })
+              }
+          },
+          error:function () {
+              alert("上传错误,请重新上传");
+          }
+      });
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商品详情页</title>
+</head>
+<link rel="stylesheet" href="layui/css/layui.css">
+<link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/layuitemplate.css">
+<style>
+
+</style>
+<body>
+<!--商品详情页请完成-->
+<div class="layui-col-md12">
+    <div class="layui-card">
+        <div class="layui-card-header">
+            <div style="padding: 20px; background-color: #F2F2F2;">
+                <div class="layui-row layui-col-space15">
+                <div class="layui-col-md4">
+                    <div class="layui-card">
+                     <!--<div class="layui-card-body" style="height: 200px;">-->
+                          <div class="layui-carousel" id="test1">
+                                <div carousel-item>
+                                    <img src="" id="demo1"/>
+                                    <img src="" id="demo2"/>
+                                    <img src="" id="demo3"/>
+                                    <img src="" id="demo4"/>
+                                </div>
+                            </div>
+                           <!-- <div>&ndash;&gt;-->
+                    </div>
+                </div>
+                <div class="layui-col-md6">
+                    <div class="layui-card">
+                        <div class="layui-card-header" style="font-size: 25px" id="name"></div>
+                        <div class="layui-card-body">
+                            拍卖发起人:<label id="demo5"></label>
+                        </div>
+                        <fieldset class="layui-elem-field layui-field-title"></fieldset>
+                        <div class="layui-card-body">
+                            拍卖底价:<label id="demo6"></label>
+                        </div>
+                        <fieldset class="layui-elem-field layui-field-title"></fieldset>
+                        <div class="layui-card-body">
+                            车辆所在地:<label id="demo7"></label>
+                        </div>
+                        <fieldset class="layui-elem-field layui-field-title"></fieldset>
+                        <div class="layui-card-body">
+                            过户次数:<label id="demo8"></label>
+                        </div>
+                        <fieldset class="layui-elem-field layui-field-title"></fieldset>
+                        <div class="layui-card-body">
+                            车主备注:<label id="demo9"></label>
+                        </div>
+                        <fieldset class="layui-elem-field layui-field-title"></fieldset>
+                        <div class="layui-card-body">
+                            <button id="btn1" class="layui-btn layui-btn-normal"><i class="layui-icon layui-icon-ok"></i>立即参与拍卖</button>
+                            <button id="btn2" class="layui-btn layui-btn-disabled"><i class="layui-icon layui-icon-ok"></i>拍卖已结束</button>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div>
+                    <fieldset class="layui-elem-field layui-field-title">
+                        <legend>商品详细参数</legend>
+                    </fieldset>
+                </div>
+                <table class="layui-hide" id="test2"></table>
+                <div>
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>当前参与拍卖的人</legend>
+                </fieldset>
+                </div>
+                <table class="layui-hide" id="test"></table>
+                <div>
+                    <fieldset class="layui-elem-field layui-field-title">
+                        <legend>车辆评论区</legend>
+                    </fieldset>
+                </div>
+                <div class="layui-fluid layadmin-message-fluid">
+                    <div class="layui-row">
+                        <div class="layui-col-md12">
+                            <div class="layui-form">
+                                <div class="layui-form-item ">
+                                    <div class="layui-input-block">
+                                        <textarea name="desc"  placeholder="您最多可以输入100字" class="layui-textarea" id="html"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="overflow: hidden;">
+                                    <div class="layui-input-block">
+                                        <button class="layui-btn" id="btn">发表</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="addCom"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+<script src="layui/layui.js"></script>
+<script>
+    layui.use(['carousel','element','table','jquery','layer'], function(){
+        var carousel = layui.carousel;
+        var elem = layui.element;
+        var table = layui.table;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        $("#btn2").hide();//隐藏掉拍卖结束
+        //轮播图
+        var ins=carousel.render({
+            elem: '#test1'
+            ,height:"480px"
+            ,width: '100%' //设置容器宽度
+            ,arrow: 'always'
+        });
+        //页面被打开了自然就会添加浏览记录
+        $(document).ready(function () {
+            var search = location.search;
+            var id= search.split("=")[1];
+            //将商品信息填充在页面上
+            $.ajax({
+                url:"app/info",
+                type:"post",
+                data:{
+                    id:id
+                },
+                dataType:"json",
+                success:function (data) {
+                    //添加浏览记录
+                    $.ajax({
+                        url:"car/addHistory",
+                        dataType:"json",
+                        type:'post',
+                        data:{
+                            carName:data[0].productName,
+                            time:new Date().toLocaleString(),
+                            scanner:localStorage.getItem('username')
+                        }
+                    });
+                    console.info(data);
+                    $("#name").html(data[0].productName);
+                    $("#demo1").attr('src',data[0].productImage1);
+                    $("#demo2").attr('src',data[0].productImage2);
+                    $("#demo3").attr('src',data[0].productImage3);
+                    $("#demo4").attr('src',data[0].productImage4);
+                    ins.reload({elem:"#test1"});
+                    $("#demo5").html(data[0].productOwner);
+                    $("#demo6").html(data[0].productPrice);
+                    $("#demo7").html(data[0].productAddress);
+                    $("#demo8").html(data[0].productOthers);
+                    $("#demo9").html(data[0].productMsg);
+                    //判断当前商品的拍卖状态
+                    if(data[0].productStatus === '已结束'){
+                        $("#btn1").hide();
+                        $("#btn2").show();
+                    }else {
+                        Show();//显示用户评论
+                    }
+                },
+                error:function () {
+                    layer.msg("用户信息显示错误");
+                }
+            });
+        });
+        //轮巡，每隔5秒就刷新一次评论
+        setInterval(Show,5000);
+        function Show(){
+            var search = location.search;
+            var id= search.split("=")[1];
+            $.ajax({
+                url:"app/info",
+                type:'post',
+                dataType:'json',
+                data:{
+                    id:id
+                },
+                success:function (data) {
+                    console.info(data[0].productName)
+                    var name = data[0].productName;
+                    //当前参与拍卖的人
+                    table.render({
+                        elem: '#test'
+                        ,url:'auc/findAllByName'
+                        ,width:505
+                        ,where:{productName:data[0].productName}
+                        ,method:'post'
+                        ,cols: [[
+                            ,{field:'userName', width:80, title: '用户名'}
+                            ,{field:'price', width:120, title: '拍卖出价'}
+                            ,{field:'time', width:300, title: '拍卖时间'}
+                        ]]
+                    });
+                    //显示用户评论
+                    $.ajax({
+                            url:"auc/findCo",
+                            type:"post",
+                            dataType:"json",
+                            data:{
+                                Name:data[0].productName
+                            },
+                            success:function (data) {
+                                data.forEach(function (item) {
+                                    var html = "<div class=\"layui-col-md12 layadmin-homepage-list-imgtxt message-content\">\n" +
+                                        "                            <div class=\"media-body\">\n" +
+                                        "                                <div class=\"pad-btm\">\n" +
+                                        "                                    <p class=\"fontColor\"><a href=\"javascript:;\">"+item.username+"</a></p>\n" +
+                                        "                                </div>\n" +
+                                        "                                <fieldset class=\"layui-elem-field layui-field-title\"></fieldset>\n" +
+                                        "                                <p class=\"message-text\">"+item.text+"</p>\n" +
+                                        "                            </div>\n" +
+                                        "                        </div>";
+                                    $("#addCom").append(html);
+                                });
+
+                            }
+                        });
+                    }
+                })
+            }
+        var search = location.search;
+        var id= search.split("=")[1];
+        //商品详细参数
+        table.render({
+            elem: '#test2'
+            ,url:'auc/findAllById?id='+id
+            ,width:970
+            ,cols: [[
+                {field:'productBrand', width:120, title: '车辆品牌'}
+                ,{field:'productLength', width:120, title: '车辆长度'}
+                ,{field:'productWidth', width:120, title: '车辆宽度'}
+                ,{field:'productColor', width:120, title: '车辆颜色'}
+                ,{field:'productOrinPrice', width:120, title: '车辆原价'}
+                ,{field:'productOil', width:120, title: '车辆油号'}
+                ,{field:'productMeters', width:120, title: '车辆里程数'}
+                ,{field:'productBlueB', width:120, title: '车辆环保标准'}
+            ]]
+        });
+        //立即参与拍卖
+        $("#btn1").click(function () {
+            var search = location.search;
+            var id= search.split("=")[1];
+            var index1=layer.prompt({title: '请输入你的愿意出的拍卖价格'}, function(price,index){
+                $.ajax({
+                    url:"app/info",
+                    type:"post",
+                    dataType:"json",
+                    data:{id:id},
+                    success:function (data) {
+                        if(price <= data[0].productPrice){
+                            layer.msg("拍卖价格低于最低拍卖价格,请重新输入",{
+                                icon:5,
+                            });
+                        }else if(!(price%1 === 0)){
+                            layer.msg("请输入数字!",{
+                                icon:2,
+                            });
+                        }else {
+                            var date = new Date();
+                            var time = date.toLocaleString();
+                            $.ajax({
+                                url:'auc/insert',
+                                type:'post',
+                                dataType:'json',
+                                data:{
+                                    sellerName:$("#demo5").html(),
+                                    userName:localStorage.getItem('username'),
+                                    Message:"用户名为"+localStorage.getItem('username')+"参与拍卖了您的商品,拍卖价格为"+price,
+                                    productName:$("#name").html(),
+                                    price:price,
+                                    time:time
+                                },
+                                success:function (res) {
+                                    if(res === true){
+                                        layer.msg('拍卖成功,你的拍卖价格为'+price,{
+                                            icon:1,
+                                        });
+                                        table.reload("test");
+                                        layer.close(index1);//拍卖页关闭
+                                    }
+                                }
+                            });
+                        }
+                   }
+                });
+
+            });
+        });
+        //发表评论
+        $("#btn").click(function () {
+            var text = $('#html').val();//得到输入的内容
+            var date = new Date();
+            var time  = date.toLocaleString();
+            var username = localStorage.getItem('username');
+            $.ajax({
+                url:"app/info",
+                data:{
+                    id:id
+                },
+                dataType:'json',
+                type:'post',
+                success:function (data) {
+                    $.ajax({
+                        url:"auc/insertCo",
+                        type:'post',
+                        data:{
+                            text:text,
+                            username:username,
+                            time:time,
+                            Name:data[0].productName
+                        },
+                        dataType:'json',
+                        success:function (res) {
+                            if(res){
+                                layer.msg("评论发表成功");
+                                //这边功能是i可以完善的，评论发表好了就可以直接显示
+                            }
+                        }
+
+                    })
+                }
+            })
+        });
+    });
+</script>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的评论</title>
+</head>
+<link rel="stylesheet" href="layui/css/layui.css">
+<body>
+<div class="layui-fluid" id="LAY-app-message">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">我的评论</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <table id="table" lay-filter="comment"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除该评论</a>
+</script>
+</body>
+<script src="layui/layui.js"></script>
+<script>
+    layui.use(['layer','jquery','table'],function () {
+       var table =  layui.table;
+       var layer = layui.layer;
+       var $ = layui.jquery;
+       var username = localStorage.getItem('username');
+        table.render({
+            elem: '#table'
+            ,url:'auc/myCom?username='+username
+            ,width:855
+            ,cols: [[
+                {field:'name', width:200, title: '汽车名称'}
+                ,{field:'text', width:300, title: '评论内容'}
+                ,{field:'time', width:200, title: '时间'}
+                ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+            ]]
+        });
+        table.on('tool(comment)',function (obj) {
+            if(obj.event ==='del'){
+                //删除评论
+                $.ajax({
+                    url:"auc/delCom",
+                    dataType:"json",
+                    type:"post",
+                    data:{
+                        id:obj.data.id
+                    },
+                    success:function (res) {
+                        if(res){
+                            layer.msg("删除成功");
+                            obj.del();
+                        }else {
+                            layer.msg("删除失败");
+                        }
+                    }
+                })
+            }
+        })
+
+    });
+</script>
+</html>

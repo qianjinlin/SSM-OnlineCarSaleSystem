@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>关于我们</title>
+</head>
+<link rel="stylesheet" href="layui/css/layui.css">
+<link rel="stylesheet" href="css/admin.css">
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>关于该系统</legend>
+</fieldset>
+<div class="layui-collapse" lay-filter="test">
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">这套在线车辆管理系统主要使用了哪些技术</h2>
+        <div class="layui-colla-content">
+            <p>技术方面,后台主要采用了SSM框架来处理数据，前台使用的是经典layui前端框架，js文件主要都是layui的js文件与html5，jquery等,前后台交互主要使用
+            Ajax交换数据,相关技术方面还有上传组件,不常见的数据持久性存储的localStorage等等......</p>
+        </div>
+    </div>
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">毕业设计制作过程中遇到什么问题了吗</h2>
+        <div class="layui-colla-content">
+            <p>问题肯定是有的,对于数据的准确性一直是个很严重的问题,前台与后台数据交互的时候必须保证数据的一一对应.
+               在做上传组件中，起初并没有理解layui的upload组件什么意思,经过查询发现后台是写实现的,上传的图片默认都是放在了服务器中.
+                在做layui的轮播图显示中，发现图片加载成功但是不显示，查官方文档才知需要重置轮播图，重置轮播图过后再次发现图片只能显示
+                一组，后面的无法显示，后来我就改了layui轮播图的动态id选择器，最终显示成功。
+            </p>
+        </div>
+    </div>
+    <div class="layui-colla-item">
+        <h2 class="layui-colla-title">毕业设计完成心得</h2>
+        <div class="layui-colla-content">
+            <p>//待编写</p>
+        </div>
+    </div>
+
+
+</div>
+</div>
+</body>
+<script src="layui/layui.js"></script>
+<script>
+    layui.use(['element', 'layer'], function(){
+        var element = layui.element;
+        var layer = layui.layer;
+
+    });
+</script>
+</html>

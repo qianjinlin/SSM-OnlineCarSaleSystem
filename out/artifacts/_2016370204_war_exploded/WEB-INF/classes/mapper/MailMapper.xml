@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 该文件编写mybatis中的mapper接口里面的方法提供对应的sql语句 -->
+<mapper namespace="cn.pji.car.dao.MailMapper">
+  <insert id="saveMsg" parameterType="cn.pji.car.domain.AdminMail">
+      insert into adminmail(sendMailer, msgTheme, message, mailTime, status)
+      values(#{sendMailer},#{msgTheme},#{message},#{mailTime},#{status});
+  </insert>
+    <select id="findUsername" resultType="cn.pji.car.domain.AdminMail">
+        select * from adminmail where sendMailer =#{sendMailer};
+    </select>
+    <select id="findAllApplication" resultType="cn.pji.car.domain.AdminMail">
+        select * from adminmail;
+    </select>
+   <!--    管理员点击同意的时候就执行该代码-->
+    <update id="Agree" parameterType="cn.pji.car.domain.User">
+        update user set isSeller = "yes"
+        where username = #{username};
+    </update>
+    <update id="statusDeal" parameterType="cn.pji.car.domain.AdminMail">
+        update adminmail set status = "已处理" where sendMailer = #{sendMailer}
+    </update>
+
+</mapper>
